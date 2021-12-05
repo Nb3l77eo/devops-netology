@@ -32,6 +32,42 @@
 	$ > filename
 	$ echo -n > filename
 	```
+	
+	```
+	Устранение замечаний:
+	$ df -h|grep root	
+	/dev/mapper/vgvagrant-root   62G  2.0G   57G   4% /
+	
+	$ mkdir data
+	
+	$ dd if=/dev/zero of=data/2del.txt bs=1G count=1
+	1+0 records in
+	1+0 records out
+	1073741824 bytes (1.1 GB, 1.0 GiB) copied, 69.7469 s, 15.4 MB/s
+	
+	$ ping 127.0.0.1 >> data/2del.txt &
+	[1] 6295
+	
+	$ df -h|grep root
+	/dev/mapper/vgvagrant-root   62G  3.0G   56G   6% /
+	
+	$ rm data/2del.txt
+	
+	$ df -h|grep root
+	/dev/mapper/vgvagrant-root   62G  3.0G   56G   6% /
+	
+	
+	$ sudo -i
+	
+	# lsof -p 6295 | grep deleted
+	ping    6295 vagrant    1w   REG  253,0 1073755689 131528 /home/vagrant/data/2del.txt (deleted)
+		
+	# echo -n > /proc/6295/fd/1
+	
+	# df -h|grep root
+	/dev/mapper/vgvagrant-root   62G  2.0G   57G   4% /
+		
+	```
 
 
 1. Занимают ли зомби-процессы какие-то ресурсы в ОС (CPU, RAM, IO)?
@@ -70,6 +106,32 @@
 	Ответ:
 	Part of the utsname information is also accessible via /proc/sys/kernel/{ostype, hostname, osrelease, version, domainname}.
 	```
+	
+	```
+	Устранение замечаний:
+	uname использует системный вызов "uname".
+	
+	# strace uname -a 2>&1 | grep uname\(
+	uname({sysname="Linux", nodename="vagrant", ...}) = 0
+	uname({sysname="Linux", nodename="vagrant", ...}) = 0
+	uname({sysname="Linux", nodename="vagrant", ...}) = 0
+	
+	uname() возвращает информацию о системе в структуру с адресом buf. Структура utsname определена в <sys/utsname.h>:
+
+	struct utsname {
+		char sysname[];    /* название операционной системы
+							  (например, «Linux») */
+		char nodename[];   /* имя в сети, зависящее от реализации */
+		char release[];    /* идентификатор выпуска ОС (например, «2.6.28») */
+		char version[];    /* версия ОС */
+		char machine[];    /* идентификатор аппаратного обеспечения */
+	#ifdef _GNU_SOURCE
+		char domainname[]; /* доменное имя NIS или YP */
+	#endif
+	};
+
+	```	
+	
 
 1. Чем отличается последовательность команд через `;` и через `&&` в bash? Например:
     ```bash
