@@ -64,7 +64,6 @@
 
 	Ответ:
 	```
-	```
 	# git clone --depth 1 https://github.com/drwetter/testssl.sh.git
 	# cd testssl.sh
 	
