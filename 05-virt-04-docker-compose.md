@@ -20,10 +20,11 @@
 - Скриншот страницы, как на слайде из презентации (слайд 37).
 
 Ответ:
-```
-![изображение](https://user-images.githubusercontent.com/93001155/154542141-1308d49c-f5ef-4109-97a5-a445a1f7634a.png)
 
-```
+<p align="center">
+  <img width="1200" height="600" src="https://user-images.githubusercontent.com/93001155/154542141-1308d49c-f5ef-4109-97a5-a445a1f7634a.png">
+</p>
+
 
 ## Задача 2
 
@@ -32,15 +33,12 @@
 Для получения зачета, вам необходимо предоставить:
 - Скриншот страницы свойств созданной ВМ, как на примере ниже:
 
-<p align="center">
-  <img width="1200" height="600" src="./assets/yc_01.png">
-</p>
 
 Ответ:
-```
-![изображение](https://user-images.githubusercontent.com/93001155/154543454-c59ddba8-4281-47c7-abf9-2a62988debf6.png)
 
-```
+<p align="center">
+  <img width="1200" height="600" src="https://user-images.githubusercontent.com/93001155/154543454-c59ddba8-4281-47c7-abf9-2a62988debf6.png">
+</p>
 
 
 
@@ -50,18 +48,17 @@
 
 Для получения зачета, вам необходимо предоставить:
 - Скриншот работающего веб-интерфейса Grafana с текущими метриками, как на примере ниже
-<p align="center">
-  <img width="1200" height="600" src="./assets/yc_02.png">
-</p>
+
 
 Ответ:
-```
 
 
-![изображение](https://user-images.githubusercontent.com/93001155/154546020-636133c0-ad72-456a-995c-5da273a50d75.png)
+
+<p align="center">
+  <img width="1200" height="600" src="https://user-images.githubusercontent.com/93001155/154546020-636133c0-ad72-456a-995c-5da273a50d75.png">
+</p>
 
 
-```
 
 
 ## Задача 4 (*)
@@ -72,11 +69,12 @@
 - Скриншот из Grafana, на котором будут отображаться метрики добавленного вами сервера.
 
 Ответ:
-```
-на скришоте видно cadvisor2 и nodeexporter2
 
-![изображение](https://user-images.githubusercontent.com/93001155/154546385-0809d991-da8e-4c52-82ec-3264e07badff.png)
+на скришоте можно увидеть cadvisor2 и nodeexporter2
+
+<p align="center">
+  <img width="1200" height="600" src="https://user-images.githubusercontent.com/93001155/154546385-0809d991-da8e-4c52-82ec-3264e07badff.png">
+</p>
 
 
 
-```
