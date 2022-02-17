@@ -75,7 +75,8 @@
 ```
 на скришоте видно cadvisor2 и nodeexporter2
 
-![изображение](https://user-images.githubusercontent.com/93001155/154546020-636133c0-ad72-456a-995c-5da273a50d75.png)
+![изображение](https://user-images.githubusercontent.com/93001155/154546385-0809d991-da8e-4c52-82ec-3264e07badff.png)
+
 
 
 ```
