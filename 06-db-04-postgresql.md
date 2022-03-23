@@ -265,6 +265,34 @@ commit;
 
 ```
 
+### Ответ-Доработка:
+```
+--Получение РК
+# pg_dump -h 127.0.0.1 -U postgres -d test_database > /backup/test_db.bak
+
+--Для необходимости соблюдения уникальности по title в таблице orders и ее шардах необходимо создавать со следующими параметрами:
+
+CREATE TABLE public.orders (
+    id integer NOT NULL,
+    title character varying(80) NOT NULL,
+    price integer DEFAULT 0,
+    CONSTRAINT orders_id_title_pkey PRIMARY KEY(id, title)
+);
+
+CREATE TABLE orders_gt499 (
+CONSTRAINT "orders_gt499_id_title_pkey" PRIMARY KEY(id, title),
+CONSTRAINT constraint_orders_gt499 CHECK ( price > 499)
+) INHERITS  ( orders);
+
+CREATE TABLE orders_le499 (
+CONSTRAINT "orders_le499_id_title_pkey" PRIMARY KEY(id, title),
+CONSTRAINT constraint_orders_le499 CHECK ( price <= 499)
+) INHERITS  ( orders);
+
+```
+
+
+
 ---
 
 ### Как cдавать задание
