@@ -292,6 +292,41 @@ CONSTRAINT constraint_orders_le499 CHECK ( price <= 499)
 ```
 
 
+### Ответ-Доработка2:
+```
+Реализация через UNIQUE без избытка по данным:
+CREATE TABLE public.orders (
+    id integer NOT NULL,
+    title character varying(80) UNIQUE NOT NULL,
+    price integer DEFAULT 0
+);
+
+-- Создание необходимых шардов
+
+CREATE TABLE orders_gt499 (
+CONSTRAINT "orders_gt499_title_uniq" UNIQUE (title),
+CONSTRAINT constraint_orders_gt499 CHECK ( price > 499)
+) INHERITS  ( orders);
+
+CREATE TABLE orders_le499 (
+CONSTRAINT "orders_le499_title_uniq" UNIQUE (title),
+CONSTRAINT constraint_orders_le499 CHECK ( price <= 499)
+) INHERITS  ( orders);
+
+Проверка решения:
+
+test_database=# insert into orders (title, price) values ('War and peace',101);
+ERROR:  duplicate key value violates unique constraint "orders_le499_title_uniq"
+DETAIL:  Key (title)=(War and peace) already exists.
+
+test_database=# insert into orders_le499 (title, price) values ('War and peace',101);
+ERROR:  duplicate key value violates unique constraint "orders_le499_title_uniq"
+DETAIL:  Key (title)=(War and peace) already exists.
+
+
+```
+
+
 
 ---
 
