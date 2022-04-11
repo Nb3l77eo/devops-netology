@@ -117,7 +117,7 @@ InterfaceError: (InterfaceError) 2013: Lost connection to MySQL server during qu
 Out-Of-Memory Killer - процесс который завершает приложение при нехватке оперативной памяти. https://habr.com/ru/company/southbridge/blog/464245/
 
 Причин может быть много.
-- Неправильно настроенная/расчитанная конфигурация PostgreSQL
+- Неправильно настроенная/рассчитанная конфигурация PostgreSQL
 - Утечка памяти в других приложениях
 - Использование x32 ОС на конфигурации железа, где необходимо использовать x64
 
