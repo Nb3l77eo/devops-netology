@@ -34,3 +34,4 @@ override.tf.json
 terraform.rc
 
 # Ignore Yandex Cloud cred
+yc_cred.tf
