@@ -1,4 +1,5 @@
 provider "yandex" {
+  # Use "export YC_TOKEN=AAAAAAaaaaqqqqqq" to set OAuth token
   cloud_id  = "b1gpe9o14ck01il0g1v0"
   folder_id = "b1g3nfj1m34nsm6diloa"
   zone      = "ru-central1-a"
@@ -16,21 +17,21 @@ resource "yandex_vpc_subnet" "default" {
 }
 
 
-resource "yandex_compute_instance" "MyFirstNode" {
-  name                      = "MyFirstNode"
+resource "yandex_compute_instance" "node1" {
+  name                      = "firstnode"
   zone                      = "ru-central1-a"
-  hostname                  = "MyFirstNode.netology.cloud"
+  hostname                  = "firstnode.netology.cloud"
   allow_stopping_for_update = true
 
   resources {
-    cores  = 1
-    memory = 1
+    cores  = 2
+    memory = 2
   }
 
   boot_disk {
     initialize_params {
-      image_id    = "fd8p7vi5c5bbs2s5i67s" #https://cloud.yandex.ru/marketplace/products/yc/centos-7
-      name        = "root-MyFirstNode"
+      image_id    = "fd8anitv6eua45627i0e" # https://cloud.yandex.ru/marketplace/products/yc/ubuntu-20-04-lts
+      name        = "root-firstnode"
       type        = "network-nvme"
       size        = "30"
     }

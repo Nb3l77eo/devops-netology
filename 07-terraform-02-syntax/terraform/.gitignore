@@ -33,5 +33,3 @@ override.tf.json
 .terraformrc
 terraform.rc
 
-# Ignore Yandex Cloud OAuth-token file
-yc_cred.tf_rename
