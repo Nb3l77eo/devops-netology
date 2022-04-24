@@ -6,52 +6,6 @@ provider "yandex" {
 }
 
 
-
-locals {
-   feach_env = {
-       app = {
-         platform = "standard-v1",
-         cores = 4,
-         memory = 4,
-         name = "app"
-       },
-       db = {
-         platform = "standard-v1",
-         cores = 4,
-         memory = 8,
-         name = "db"
-       }
-   }
- }
-
-resource "yandex_compute_instance" "node2" {
- for_each = local.feach_env
-
- resources {
-   cores  = each.value.cores
-   memory = each.value.memory
- }
-
- boot_disk {
-   initialize_params {
-     image_id    = "fd8anitv6eua45627i0e" # https://cloud.yandex.ru/marketplace/products/yc/ubuntu-20-04-lts
-     name        = "root-node1${each.value.name}"
-     type        = "network-nvme"
-     size        = "30"
-   }
- }
-
- network_interface {
-   subnet_id = "${yandex_vpc_subnet.default.id}"
-   nat       = true
- }
- metadata = {
- user-data = "${file("meta.txt")}"
- }
-}
-
-
-
 resource "yandex_compute_instance" "node1" {
   name                      = "node-${count.index}"
   zone                      = "ru-central1-a"
@@ -81,4 +35,31 @@ resource "yandex_compute_instance" "node1" {
 
   metadata = {
     user-data = "${file("meta.txt")}"  }
+}
+
+
+resource "yandex_compute_instance" "node2" {
+ for_each = local.feach_env
+
+ resources {
+   cores  = each.value.cores
+   memory = each.value.memory
+ }
+
+ boot_disk {
+   initialize_params {
+     image_id    = "fd8anitv6eua45627i0e" # https://cloud.yandex.ru/marketplace/products/yc/ubuntu-20-04-lts
+     name        = "root-node1${each.value.name}"
+     type        = "network-nvme"
+     size        = "30"
+   }
+ }
+
+ network_interface {
+   subnet_id = "${yandex_vpc_subnet.default.id}"
+   nat       = true
+ }
+ metadata = {
+ user-data = "${file("meta.txt")}"
+ }
 }

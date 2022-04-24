@@ -16,4 +16,19 @@ locals {
    prod = 2
  }
 
+ feach_env = {
+   app = {
+     platform = "standard-v1",
+     cores = 4,
+     memory = 4,
+     name = "app"
+   },
+   db = {
+     platform = "standard-v1",
+     cores = 4,
+     memory = 8,
+     name = "db"
+   }
+ }
+
 }
