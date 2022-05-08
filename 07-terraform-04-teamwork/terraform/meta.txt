@@ -1,0 +1,8 @@
+#cloud-config
+users:
+  - name: fuser
+    groups: sudo
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh-authorized-keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC9rackDcwZvm/J+sqLX7/qdZnNmbHenKyMdgPTfdADmzjoGDsWi5pefPg6MC1Ny+cLtp8MFVPrgxinusJNieEW+TWh0KY93c6FgUPkyAJ2uVcUI9B8nMZIjyMM1En7SJAtWZm4x1s8W4lz9+4cQpZ3Yn/nyZP/tR8T3AGD9B94O/t2zKMH0O8XiYqNgrdHkPTvarkLJLLV81Lv4XGLj6BDEjARpfwUPGkOcdzWOVYQCNmAN5dDlIqY4senukzjtKQKD/fUB2ZmqODG/5gnS6IUJNw6v1X0IgFD+fIHefbzgHiI4jgJQQaO2m7L7qsRdbEyFCpDfCiVZ89XAbX67BpvQZRseCVmkcmLAABhPjrFpdxVQfQFsSZMmT6W3hg6ygeHZd9+Hz+OVjtwDxct2yIDR71zRqIALX70YyVEYv8T24ehGyOfhE5xHZkhNwPpeBPI0oRmrdI/lAnBJUvM84KhiB5KFcoYIF2u9xmTGWr68vxBjHuc3AcnQVd0t3FBzKs= root@vagrant

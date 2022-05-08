@@ -41,6 +41,14 @@
 
 В качестве результата приложите ссылку на файлы `server.yaml` и `atlantis.yaml`.
 
+###Ответ:
+- `server.yaml` - 
+- `atlantis.yaml` - 
+
+Репозиторий в котором проводились экспиременты с Atlantis: https://github.com/Nb3l77eo/atlantis_testing/
+
+
+
 ## Задача 3. Знакомство с каталогом модулей. 
 
 1. В [каталоге модулей](https://registry.terraform.io/browse/modules) найдите официальный модуль от aws для создания
