@@ -41,7 +41,7 @@
 
 В качестве результата приложите ссылку на файлы `server.yaml` и `atlantis.yaml`.
 
-###Ответ:
+### Ответ:
 - `server.yaml` - https://github.com/Nb3l77eo/devops-netology/blob/main/07-terraform-04-teamwork/atlantis/repo-config.yaml
 - `atlantis.yaml` - https://github.com/Nb3l77eo/devops-netology/blob/main/07-terraform-04-teamwork/atlantis.yaml
 
@@ -60,7 +60,7 @@
 
 В качестве результата задания приложите ссылку на созданный блок конфигураций. 
 
-###Ответ:
+### Ответ:
 
 К сожалению, выполнить данное задание не получилоась, т.к. зарегистрированного аккаунта aws нет и регистрация в данный момент с карстами российских банков недоступна.
 
