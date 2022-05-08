@@ -42,8 +42,8 @@
 В качестве результата приложите ссылку на файлы `server.yaml` и `atlantis.yaml`.
 
 ###Ответ:
-- `server.yaml` - 
-- `atlantis.yaml` - 
+- `server.yaml` - https://github.com/Nb3l77eo/devops-netology/blob/main/07-terraform-04-teamwork/atlantis/repo-config.yaml
+- `atlantis.yaml` - https://github.com/Nb3l77eo/devops-netology/blob/main/07-terraform-04-teamwork/atlantis.yaml
 
 Репозиторий в котором проводились экспиременты с Atlantis: https://github.com/Nb3l77eo/atlantis_testing/
 
@@ -59,6 +59,12 @@
 Создайте аналогичный инстанс при помощи найденного модуля.   
 
 В качестве результата задания приложите ссылку на созданный блок конфигураций. 
+
+###Ответ:
+
+К сожалению, выполнить данное задание не получилоась, т.к. зарегистрированного аккаунта aws нет и регистрация в данный момент с карстами российских банков недоступна.
+
+
 
 ---
 
