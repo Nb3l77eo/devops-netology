@@ -1,0 +1,20 @@
+node("linux"){
+    stage("Git checkout"){
+        git credentialsId: 'd3bbb3f9-6b7a-4b85-81a9-53d78954bb7a', url: 'git@github.com:aragastmatb/example-playbook.git'
+    }
+    stage("Install ansi requi"){
+        sh 'ansible-galaxy role install -r requirements.yml -f'
+    }
+    stage("Sample define secret_check"){
+        secret_check=params.prod_run
+    }
+    stage("Run playbook"){
+        if (secret_check){
+            sh 'ansible-playbook site.yml -i inventory/prod.yml'
+        }
+        else{
+            sh 'ansible-playbook site.yml -i inventory/prod.yml --check --diff'
+        }
+        
+    }
+}
