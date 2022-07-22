@@ -149,9 +149,9 @@
 
 
 <details>
-    <summary style="font-size:14px">Скриншот</summary>
-  
-    ![изображение](https://user-images.githubusercontent.com/93001155/180410155-71fa03db-8226-4e7d-ba13-95938258be50.png)
+  <summary style="font-size:14px">Скриншот</summary>
+
+  ![изображение](https://user-images.githubusercontent.com/93001155/180410155-71fa03db-8226-4e7d-ba13-95938258be50.png)
 </details>
 
 5. Изучите список [telegraf inputs](https://github.com/influxdata/telegraf/tree/master/plugins/inputs). 
