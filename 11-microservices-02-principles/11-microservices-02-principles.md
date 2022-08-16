@@ -166,7 +166,7 @@ curl -X GET http://localhost/images/4e6df220-295e-4231-82bc-45e4b1484430.jpg
 <details>
     <summary style="font-size:18px">Ответ:</summary>
 
-Проект по дополнительному заданию расположен в [additional](/additional)
+Проект по дополнительному заданию расположен в [additional](additional/)
 
 
     ```
