@@ -6,6 +6,10 @@
 
 ## Задача 1: API Gateway 
 
+<details>
+    <summary style="font-size:18px">Задание:</summary>
+
+
 Предложите решение для обеспечения реализации API Gateway. Составьте сравнительную таблицу возможностей различных программных решений. На основе таблицы сделайте выбор решения.
 
 Решение должно соответствовать следующим требованиям:
@@ -15,9 +19,11 @@
 
 Обоснуйте свой выбор.
 
+</details>
 
 
-
+<details>
+    <summary style="font-size:18px">Ответ:</summary>
 
 Product\Func            | https | auth  | DeclConf  | FCPM      | FTPM      |
 ---                     |:---:  |:---:  |:---:      |:---:      |:---:      |
@@ -37,14 +43,18 @@ SelfCreated (nginx)     | +     | +     | +         |unlim      |unlim      |
 *AG - API Gateway
 
 Выбор того или иного решения API gateway будет обусловлен требованиями проекта и опытом работы команды с продуктом. Для начальных проектом можно воспользоваться готовыми облачными решениями с бесплатным функционалом, когда требуется быстрый запуск продукта и минимальные затраты на его использование. Построение собственного решения AG имеет смысл, когда затраты на использование готового продукта будут превышать затраты на разработку и сопровождение собственного решения AG.
-<details>
-    <summary style="font-size:18px">Ответ:</summary>
+
+
 </details>
 
 
 ---
 
 ## Задача 2: Брокер сообщений
+
+<details>
+    <summary style="font-size:18px">Задача:</summary>
+
 
 Составьте таблицу возможностей различных брокеров сообщений. На основе таблицы сделайте обоснованный выбор решения.
 
@@ -57,7 +67,10 @@ SelfCreated (nginx)     | +     | +     | +         |unlim      |unlim      |
 - Простота эксплуатации
 
 Обоснуйте свой выбор.
+</details>
 
+<details>
+    <summary style="font-size:18px">Ответ:</summary>
 
 Func\Product            | Kafka | RabbitMQ  | Redis  |
 ---                     |---    |---        |---    |
@@ -85,8 +98,16 @@ Push-модели доставки сообщений.
 Выбор решения зависит от целей использования и требований проекта. Например: Redis почти идеально подходит для обмена кратковременными сообщениями, когда не требуется персистентность.Kafka распределенная очередь с высокой пропускной способностью подходит в тех случаях, где требуется персистентность. RabbitMQ брокер со множеством функций и возможностей, поддерживающих сложную маршрутизацию, способен обеспечивать маршрутизацию сообщений при незначительном трафике.
 
 
+</details>
+
+
+---
 
 ## Задача 3: API Gateway * (необязательная)
+
+<details>
+    <summary style="font-size:18px">Задача:</summary>
+
 
 ### Есть три сервиса:
 
@@ -139,6 +160,84 @@ curl -X POST -H 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJz
 
 **Получение файла**
 curl -X GET http://localhost/images/4e6df220-295e-4231-82bc-45e4b1484430.jpg
+
+</details>
+
+<details>
+    <summary style="font-size:18px">Ответ:</summary>
+
+Проект по дополнительному заданию расположен в [additional](/additional)
+
+
+    ```
+        events {
+        worker_connections 1024;
+    }
+
+    http {
+        
+        upstream security {
+            server security:3000;
+        }
+        upstream uploader {
+            server uploader:3000;
+        }
+        upstream storage {
+            server storage:9000;
+        }
+
+        server {
+            listen 80;
+
+            location /register {
+                rewrite ^/register(.*)$ /v1/register$1 break;
+                proxy_pass http://security/;
+            }
+            location /token {
+                rewrite ^/token(.*)$ /v1/token$1 break;
+                proxy_pass http://security/;
+            }
+            location /user {
+                rewrite ^/user(.*)$ /v1/user$1 break;
+                proxy_pass http://security/;
+            }
+
+            location /auth {
+                rewrite ^/auth(.*)$ /v1/token/validation$1 break;
+                proxy_pass http://security/;
+            }
+
+            location /test {
+                auth_request /auth;
+                rewrite ^/test(.*)$ /v1/user$1 break;
+                proxy_pass http://security/;
+                error_page 401 403 @unauthorized;
+            }
+
+            location /upload {
+                auth_request /auth;
+                rewrite ^/upload(.*)$ /v1/upload$1 break;
+                proxy_pass http://uploader/;
+                error_page 401 403 @unauthorized;
+            }
+
+            location /images {
+                auth_request /auth;
+                rewrite ^/images(.*)$ /data$1 break;
+                proxy_pass http://storage/;
+                error_page 401 403 @unauthorized;
+            }
+
+            location @unauthorized {
+                return 401 "unauthorized";
+            }
+        }
+    }
+    ```
+</details>
+
+
+
 
 ---
 

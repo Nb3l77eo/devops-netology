@@ -80,9 +80,3 @@ services:
       - storage
       - uploader
       - security
-
-  # test:
-  #   image: centos:7
-  #   hostname: test
-  #   entrypoint: > 
-  #     sleep 99999999
