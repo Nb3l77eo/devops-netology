@@ -1,0 +1,224 @@
+volumes:
+  data:
+  prometheus_data:
+  grafana_data:
+  data_es:
+
+
+
+services:
+
+  storage:
+    container_name: storage
+    hostname: storage
+    image: minio/minio:latest
+    command: server /data
+    restart: always
+    expose: 
+      - 9000
+    environment:
+      MINIO_ROOT_USER: "${Storage_AccessKey:-STORAGE_ACCESS_KEY}"
+      MINIO_ROOT_PASSWORD: "${Storage_Secret:-STORAGE_SECRET_KEY}"
+      MINIO_PROMETHEUS_AUTH_TYPE: public
+    volumes:
+      - data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    depends_on:
+      - elastic
+    labels:
+      org.label-schema.group: "application"
+
+  createbuckets:
+    image: minio/mc
+    depends_on:
+      - storage
+    restart: on-failure
+    entrypoint: > 
+      /bin/sh -c "      
+      /usr/bin/mc config host add storage http://storage:9000 ${Storage_AccessKey-STORAGE_ACCESS_KEY} ${Storage_Secret-STORAGE_SECRET_KEY} &&
+      /usr/bin/mc mb --ignore-existing storage/${Storage_Bucket:-data} &&
+      /usr/bin/mc policy set download storage/${Storage_Bucket:-data} &&
+      exit 0;
+      "
+    labels:
+      org.label-schema.group: "application"
+
+  uploader:
+    container_name: uploader
+    hostname: uploader
+    build: ./uploader
+    depends_on:
+      - storage
+      - createbuckets
+    expose: 
+      - 3000
+    environment:
+      PORT: 3000
+      S3_HOST: storage
+      S3_PORT: 9000
+      S3_ACCESS_KEY: ${Storage_AccessKey:-STORAGE_ACCESS_KEY}
+      S3_ACCESS_SECRET: ${Storage_Secret:-STORAGE_SECRET_KEY}
+      S3_BUCKET: ${Storage_Bucket:-STORAGE_BUCKET}
+    labels:
+      org.label-schema.group: "application"
+  
+  security:
+    container_name: security
+    hostname: security
+    build: ./security
+    expose: 
+      - 3000
+    environment:
+      PORT: 3000
+    labels:
+      org.label-schema.group: "application"
+
+  gateway:
+    container_name: gateway
+    hostname: gateway
+    image: nginx:alpine
+    volumes:
+      - ./gateway/nginx.conf:/etc/nginx/nginx.conf:rw
+    ports:
+      - "80:80"
+    depends_on:
+      - storage
+      - uploader
+      - security
+    labels:
+      org.label-schema.group: "application"
+
+## EVK - stack
+
+
+  add_elastic_user:
+    container_name: add_elastic_user
+    image: elastic/elasticsearch:7.16.2
+    environment:
+      EK_NEWUSER_NAME: "${EK_NEWUSER_NAME}"
+      EK_NEWUSER_PWD: "${EK_NEWUSER_PWD}"
+      ES_USERNAME: "${ES_USERNAME}"
+      ES_PASSWORD: "${ES_PASSWORD}"
+    command: >
+      bash -c '
+      /root/add_es_user.sh
+      '
+    volumes:
+      - ./configs/add_es_user.sh:/root/add_es_user.sh:Z
+    depends_on:
+      - kibana
+    labels:
+      org.label-schema.group: "logging"
+
+  elastic:
+    image: elastic/elasticsearch:7.16.2
+    container_name: elastic
+    environment:
+      node.name: "elastic"
+      discovery.type: "single-node"
+      bootstrap.memory_lock: "true"
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+      xpack.security.enabled: "true"
+      xpack.license.self_generated.type: basic
+      ELASTIC_PASSWORD: "${ES_PASSWORD}"
+      ES_USERNAME: "${ES_USERNAME}"
+      ES_PASSWORD: "${ES_PASSWORD}"
+    volumes:
+      - data_es:/usr/share/elasticsearch/data:Z
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    ports:
+      - 9200:9200
+    labels:
+      org.label-schema.group: "logging"
+
+  kibana:
+    image: elastic/kibana:7.16.2
+    container_name: kibana
+    ports:
+      - ${KIBANA_EXT_PORT}:5601
+    environment:
+      ELASTICSEARCH_URL: "http://elastic:9200"
+      ELASTICSEARCH_HOSTS: "http://elastic:9200"
+      ELASTICSEARCH_USERNAME: "${ES_USERNAME}"
+      ELASTICSEARCH_PASSWORD: "${ES_PASSWORD}"
+    depends_on:
+      - elastic
+    labels:
+      org.label-schema.group: "logging"
+
+  vector:
+    image: timberio/vector:latest-debian
+    container_name: vector
+    privileged: true
+    user: root
+    environment:
+      ES_USERNAME: "${ES_USERNAME}"
+      ES_PASSWORD: "${ES_PASSWORD}"
+      ES_URL: "${ES_URL}"
+    volumes:
+      - ./configs/vector.toml:/etc/vector/vector.toml:ro
+      - /var/lib/docker:/var/lib/docker:Z
+      - /var/run/docker.sock:/var/run/docker.sock:Z
+    depends_on:
+      - elastic
+    labels:
+      org.label-schema.group: "logging"
+
+
+## Test app
+
+  some_application:
+    image: library/python:3.9-alpine
+    container_name: some_app
+    volumes:
+      - ./pinger/run.py:/opt/run.py:Z
+    entrypoint: python3 /opt/run.py
+    labels:
+      org.label-schema.group: "application"
+
+
+
+## Prometheus - Grafana
+
+  prometheus:
+    image: prom/prometheus:v2.17.1
+    container_name: prometheus
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=15d'
+      - '--web.enable-lifecycle'
+    labels:
+      org.label-schema.group: "monitoring"
+
+  grafana:
+    image: grafana/grafana:7.4.2
+    container_name: grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    ports:
+      - ${GRAFANA_EXT_PORT}:3000
+    labels:
+      org.label-schema.group: "monitoring"
+
+

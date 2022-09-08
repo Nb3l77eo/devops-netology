@@ -1,0 +1,20 @@
+[sources.in]
+    type = "docker_logs"
+    include_labels = [ "org.label-schema.group=application" ]
+
+
+[transforms.my_transform_id]
+    type = "remap"
+    inputs = [ "in" ]
+    source = """
+    del(.label)"""
+
+
+[sinks.elastic]
+    type = "elasticsearch"
+    inputs = ["my_transform_id"]
+    endpoint = "${ES_URL}"
+    suppress_type_name = true
+    auth.strategy = "basic"
+    auth.user = "${ES_USERNAME}"
+    auth.password = "${ES_PASSWORD}"
