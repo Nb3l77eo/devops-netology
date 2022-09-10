@@ -1,0 +1,13 @@
+---
+  r1:
+    hosts:
+      redis1:
+        ansible_connection: docker
+  r2:
+    hosts:
+      redis2:
+        ansible_connection: docker
+  r3:
+    hosts:
+      redis3:
+        ansible_connection: docker

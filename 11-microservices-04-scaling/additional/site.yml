@@ -1,0 +1,105 @@
+---
+  - name: "Prepare nodes"
+    hosts: all
+    tasks:
+      - name: Install epel
+        ansible.builtin.yum:
+          name: 
+            - epel-release
+            - wget
+          state: present
+      - name: Install REDIS
+        ansible.builtin.yum:
+          name: 'redis'
+          state: present
+      - name: Redis change bind
+        ansible.builtin.lineinfile:
+          dest: /etc/redis.conf
+          regexp: 'bind 127.0.0.1'
+          insertbefore: BOF
+          line: 'bind 0.0.0.0'
+      - name: Redis change protect-mode
+        ansible.builtin.lineinfile:
+          dest: /etc/redis.conf
+          regexp: 'protected-mode yes'
+          insertbefore: BOF
+          line: 'protected-mode no'
+      - name: Redis change daemonize
+        ansible.builtin.lineinfile:
+          dest: /etc/redis.conf
+          regexp: 'daemonize no'
+          insertbefore: BOF
+          line: 'daemonize yes'
+      - name: "Start redis master for all nodes"
+        ansible.builtin.command: >
+          /usr/bin/redis-server /etc/redis.conf \
+          --daemonize yes \
+          --cluster-enabled yes \
+          --dbfilename dump_7000.rdb \
+          --port 7000 --cluster-config-file nodes_7000.conf \
+          --pidfile /var/run/redis/redis-server_7000.pid \
+          --logfile /var/log/redis/redis-server_7000.log
+      - name: "Start redis slave for all nodes"
+        ansible.builtin.command: >
+          /usr/bin/redis-server /etc/redis.conf \
+          --daemonize yes \
+          --cluster-enabled yes \
+          --dbfilename dump_7001.rdb \
+          --port 7001 --cluster-config-file nodes_7001.conf \
+          --pidfile /var/run/redis/redis-server_7001.pid \
+          --logfile /var/log/redis/redis-server_7001.log
+
+  - name: "Prepare redis-trib"
+    hosts: redis1
+    tasks:
+      - name: "Install make_gcc"
+        ansible.builtin.yum:
+          name: 
+            - make
+            - gcc
+            - openssl-devel
+            - bzip2-devel
+          state: present
+      - name: "Download Python-3.8.7"
+        ansible.builtin.shell: |
+          wget https://www.python.org/ftp/python/3.8.7/Python-3.8.7.tgz
+          tar xzf Python-3.8.7.tgz
+        args:
+          chdir: /tmp
+      - name: "Install Python-3.8.7"
+        ansible.builtin.shell: |
+          cd Python-3.8.7
+          ./configure --enable-optimizations
+          make altinstall
+        args:
+          chdir: /tmp
+      - name: "Create link Python-3.8.7"
+        ansible.builtin.shell: |
+          ln -sfn /usr/local/bin/python3.8 /usr/bin/python3
+          ln -sfn /usr/local/bin/pip3.8 /usr/bin/pip3
+      - name: "Install redis-trib"
+        ansible.builtin.shell:
+          wget https://bootstrap.pypa.io/get-pip.py && \
+          python3 get-pip.py && rm -rf get-pip.py && \
+          pip3 install --upgrade --force-reinstall setuptools && pip3 install redis-trib
+        args:
+          chdir: /tmp
+      - name: "create redis cluster"
+        ansible.builtin.shell: |
+          redis-trib.py create \
+            $(ping -q -W1 -c1 redis1 | head -n1 | cut -d "(" -f2 | cut -d ")" -f1):7000 \
+            $(ping -q -W1 -c1 redis2 | head -n1 | cut -d "(" -f2 | cut -d ")" -f1):7000 \
+            $(ping -q -W1 -c1 redis3 | head -n1 | cut -d "(" -f2 | cut -d ")" -f1):7000
+      - name: "add redis replica"
+        ansible.builtin.shell: |
+          redis-trib.py replicate \
+            --slave-addr $(ping -q -W1 -c1 redis1 | head -n1 | cut -d "(" -f2 | cut -d ")" -f1):7001 \
+            --master-addr $(ping -q -W1 -c1 redis2 | head -n1 | cut -d "(" -f2 | cut -d ")" -f1):7000
+          
+          redis-trib.py replicate \
+            --slave-addr $(ping -q -W1 -c1 redis2 | head -n1 | cut -d "(" -f2 | cut -d ")" -f1):7001 \
+            --master-addr $(ping -q -W1 -c1 redis3 | head -n1 | cut -d "(" -f2 | cut -d ")" -f1):7000
+          
+          redis-trib.py replicate \
+            --slave-addr $(ping -q -W1 -c1 redis3 | head -n1 | cut -d "(" -f2 | cut -d ")" -f1):7001 \
+            --master-addr $(ping -q -W1 -c1 redis1 | head -n1 | cut -d "(" -f2 | cut -d ")" -f1):7000
