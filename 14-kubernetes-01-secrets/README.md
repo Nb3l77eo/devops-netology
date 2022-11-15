@@ -71,9 +71,17 @@ kubectl apply -f domain-cert.yml
 <details>
     <summary style="font-size:15px">Описание:</summary>
 
+![изображение](https://user-images.githubusercontent.com/93001155/201919046-03d7c3d3-8dd6-4173-b2d2-e6e8f1d20de5.png)
+![изображение](https://user-images.githubusercontent.com/93001155/201919236-69161b9e-4be4-40cb-a822-66cab20a2d98.png)
+
+![изображение](https://user-images.githubusercontent.com/93001155/201919084-b8030cd9-5770-4330-ba69-cd6556c6d116.png)
+![изображение](https://user-images.githubusercontent.com/93001155/201919104-c52030b3-5fbd-4b8c-853a-7319f20a367e.png)
+![изображение](https://user-images.githubusercontent.com/93001155/201919144-aa904bc8-3cf9-4703-bc4d-bb667e6c3c90.png)
+![изображение](https://user-images.githubusercontent.com/93001155/201919167-2c2aa5c9-51f4-4022-a04c-078b91949093.png)
 
 
-<details>
+
+</details>
 
 ---
 
