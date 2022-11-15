@@ -17,7 +17,8 @@
 <details>
     <summary style="font-size:15px">Описание:</summary>
 
-    Для создания инфраструктуры в YC использовался [terraform](terraform/) 
+
+Для создания инфраструктуры в YC использовался [terraform](terraform/) 
 
     ```bash
     $ terraform apply -auto-approve
@@ -52,6 +53,7 @@
 
     [vagrant@k8s-master1 ~]$ kubectl create deploy nginx --image=nginx:latest --replicas=2
     deployment.apps/nginx created
+
 
     [vagrant@k8s-master1 ~]$ kubectl get po -o wide
     NAME                     READY   STATUS    RESTARTS   AGE   IP               NODE          NOMINATED NODE   READINESS GATES
