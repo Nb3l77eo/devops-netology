@@ -16,7 +16,7 @@
 <details>
     <summary style="font-size:15px">Решение:</summary>
 
-Применяем манифесты. Доступны в [Stage](/Stage)
+Применяем манифесты. Доступны в [Stage](./Stage)
 
 ```bash
 [vagrant@mgmt-node Stage]$ kubectl apply -f .
@@ -88,7 +88,7 @@ postgresql-db-0                   1/1     Running   0          2m6s
 <details>
     <summary style="font-size:15px">Решение:</summary>
 
-Применяем манифесты. Доступны в [Production](/Production)
+Применяем манифесты. Доступны в [Production](./Production)
 ```bash
 [vagrant@mgmt-node Stage]$ cd ../Production/
 
