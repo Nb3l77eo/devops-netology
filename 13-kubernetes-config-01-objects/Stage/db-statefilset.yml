@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgresql-db
+  namespace: default
+spec:
+  serviceName: postgresql-db-service
+  selector:
+    matchLabels:
+      app: postgresql-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: postgresql-db
+    spec:
+      containers:
+        - name: postgresql-db
+          image: postgres:latest
+          imagePullPolicy: "IfNotPresent"
+          env:
+          - name: POSTGRES_PASSWORD
+            value: testpassword
+          - name: PGDATA
+            value: /data/pgdata
+          volumeMounts:
+          - name: data
+            mountPath: /data/pgdata
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: local-volume-postgres

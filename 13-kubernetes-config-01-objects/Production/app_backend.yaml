@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: app-backend
+  name: app-backend
+  namespace: default
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: app-backend
+  template:
+    metadata:
+      labels:
+        app: app-backend
+    spec:
+      containers:
+      - image: praqma/network-multitool:alpine-extra
+        imagePullPolicy: IfNotPresent
+        name: back-cont
+        env:
+          - name: HTTP_PORT
+            value: "8080"
+          - name: db-address
+            value: db-postgres-svc.default.svc.cluster.local
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-svc
+  namespace: default
+spec:
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+  selector:
+    app: app-backend
