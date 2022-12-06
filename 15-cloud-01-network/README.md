@@ -52,6 +52,7 @@ Use_this_IP_to_connect = [
 ]
 ```
 
+![изображение](https://user-images.githubusercontent.com/93001155/205937317-bfa22e95-8bac-4d32-8a86-6e7f647539f1.png)
 
 
 ```bash
