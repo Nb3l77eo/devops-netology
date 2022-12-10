@@ -66,5 +66,17 @@ Network_load_balancer_external_IP = tolist([
 <details>
     <summary style="font-size:15px">Скриншоты:</summary>
 
+![изображение](https://user-images.githubusercontent.com/93001155/206725745-a3bb36e7-1c75-4b20-955c-be9ba696fcde.png)
+
+![изображение](https://user-images.githubusercontent.com/93001155/206725759-9745cad9-7daf-4461-87e3-164f4c1a136c.png)
+
+![изображение](https://user-images.githubusercontent.com/93001155/206725784-39ef46db-affe-480e-a83e-571276541dda.png)
+
+![изображение](https://user-images.githubusercontent.com/93001155/206725817-e8e2fcbb-7ea6-40a1-9aae-898811d2f153.png)
+
+![изображение](https://user-images.githubusercontent.com/93001155/206725866-fd2af0b4-9970-4ce8-bda4-0aa3dec8d33b.png)
+
+![изображение](https://user-images.githubusercontent.com/93001155/206725890-7cd8cf98-61e7-4eb3-b080-f1736ef8a494.png)
+
 
 </details>
