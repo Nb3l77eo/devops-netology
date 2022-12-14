@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: modul1
+  name: modul1
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: modul1
+  template:
+    metadata:
+      labels:
+        app: modul1
+    spec:
+      containers:
+      - image: praqma/network-multitool:alpine-extra
+        imagePullPolicy: IfNotPresent
+        name: modul1
+        env:
+          - name: backend-address
+            value: backend-svc.default.svc.cluster.local
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: modul1-netpol
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      app: modul1
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            app: modul2
+  egress:
+    - to:
+      - podSelector:
+          matchLabels:
+            app: modul2
+      - ipBlock:
+          cidr: 0.0.0.0/0
+          except:
+          - 10.0.0.0/8
+          - 192.168.0.0/16
+          - 172.16.0.0/20

@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: modul3
+  name: modul3
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: modul3
+  template:
+    metadata:
+      labels:
+        app: modul3
+    spec:
+      containers:
+      - image: praqma/network-multitool:alpine-extra
+        imagePullPolicy: IfNotPresent
+        name: back-cont
+        env:
+          - name: HTTP_PORT
+            value: "8080"
