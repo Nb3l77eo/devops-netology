@@ -66,6 +66,7 @@ EOT
 
 
 Скрин:
+![изображение](https://user-images.githubusercontent.com/93001155/211199917-c5b60d44-50a7-4916-8bfb-ae3eedf96014.png)
 
 
 
