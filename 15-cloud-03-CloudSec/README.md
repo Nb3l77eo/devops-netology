@@ -30,6 +30,16 @@
 
 2. Снимки подтверждающие выполнение второй части задания:
 
+![изображение](https://user-images.githubusercontent.com/93001155/208243477-9ad87f82-1daf-4623-a4ed-1b9c0aa47d38.png)
+
+![изображение](https://user-images.githubusercontent.com/93001155/208243506-2bb96426-b62d-4cf0-b785-dfa2cb7ea6c8.png)
+
+![изображение](https://user-images.githubusercontent.com/93001155/208243530-80db93c5-b141-4a96-80c0-31bd2b3453fa.png)
+
+![изображение](https://user-images.githubusercontent.com/93001155/208243580-13627467-2a63-4d75-9085-c8d5b68b5a92.png)
+
+
+
 
 
 </details>
